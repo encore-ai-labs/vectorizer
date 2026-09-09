@@ -58,6 +58,22 @@ See [validation results](docs/VALIDATION.md) for measured raster fidelity and th
 
 ## Deploy to Cloudflare
 
+### Share at tracer.candleapp.dev
+
+Deploy this repository as a **Worker**, not a Pages project:
+
+1. In Cloudflare **Workers & Pages**, create an application and import `encore-ai-labs/vectorizer` from GitHub. Grant Cloudflare access to this private repository if necessary.
+2. Use `main`, repository root, Worker name `contour-vectorizer`, build command `npm run build`, and deploy command `npx wrangler deploy`. Use Node 24 (`.nvmrc`; set build variable `NODE_VERSION=24` if needed).
+3. Deploy and test the generated `workers.dev` URL.
+4. In the Worker, open **Settings → Domains & Routes → Add → Custom Domain**, and enter `tracer.candleapp.dev`.
+5. `candleapp.dev` must be an active Cloudflare zone in the same account. Cloudflare creates the DNS record and HTTPS certificate for the custom domain. Do not point a manual CNAME at the `workers.dev` URL. If `tracer` already has a DNS record, inspect its existing use before changing it.
+
+The custom domain is intentionally not hardcoded in Wrangler yet; adding it is an explicit account-side deployment step. Once connected, share `https://tracer.candleapp.dev` with your friend. This is a public app unless you separately restrict access. The GitHub repository can remain private.
+
+References: [Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/) and [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/).
+
+### CLI alternative
+
 Prepared for **Cloudflare Workers Static Assets**, with no Worker server code, database, secrets, or paid AI/GPU bindings. `wrangler.jsonc` points at Vite’s `dist` output. `public/_headers` configures CSP, anti-framing, MIME protection, and immutable caching for hashed bundles.
 
 ```sh

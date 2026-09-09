@@ -11,8 +11,15 @@ test('Wasm traces every sample into standalone, editable SVG paths', async ({ pa
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('button', { name: /Download SVG/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /Download SVG/ })).toBeHidden();
+  await expect(page.getByRole('complementary', { name: 'Tracing settings' })).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Choose an image' })).toBeVisible();
+  await expect(page.getByText('Ctrl+V', { exact: true })).toBeVisible();
   await page.screenshot({ path: 'test-results/empty-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: 'test-results/empty-mobile.png', fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.setViewportSize({ width: 1440, height: 1100 });
   for (const name of ['Sun bloom', 'Camera', 'Electric pop', 'Pixel heart', 'Speckle test']) {
     await page.getByRole('button', { name: `Try ${name} sample` }).click();
     await ready(page);
@@ -104,6 +111,9 @@ test('drop, upload errors, mobile layout, and rapid changes recover', async ({ p
   await expect(page.getByLabel('Color limit')).toHaveValue('16');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: 'test-results/mobile.png', fullPage: true });
+  const settingsBounds = await page.getByRole('complementary', { name: 'Tracing settings' }).boundingBox();
+  const samplesBounds = await page.locator('.samples').boundingBox();
+  expect(settingsBounds!.y).toBeLessThan(samplesBounds!.y);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.getByRole('button', { name: 'Try Camera sample' }).click();
   await ready(page);

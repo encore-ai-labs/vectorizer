@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-08T00:00:00Z",
+  "title": "Design System: Contour",
+  "extensions": {
+    "breakpoints": [
+      { "name": "stacked", "value": "800px" },
+      { "name": "compact", "value": "480px" }
+    ],
+    "shadows": [],
+    "motion": [
+      { "name": "control-feedback", "value": "0.15s ease-out", "purpose": "Background and border feedback; disabled for reduced motion." }
+    ]
+  },
+  "narrative": {
+    "northStar": "Classic HTML utility",
+    "overview": "Compact, plain, fast, and functional; familiar web controls without a retro costume.",
+    "keyCharacteristics": ["Left-aligned", "Flat", "Task-first", "Responsive"],
+    "dos": ["Preserve local processing and native screenshot paste", "Use visible labels and focus outlines"],
+    "donts": ["No oversized upload cards", "No marketing slogans or decorative badges"]
+  }
+}
