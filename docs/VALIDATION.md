@@ -1,5 +1,13 @@
 # Validation
 
+## Conservative defaults and numeric controls
+
+The updated Clean icon preset uses 25% smoothing, 1px cleanup, and 0.2px simplification (previously 55%, 4px, and 0.5px). Browser regression coverage includes square-corner retention and an isolated one-pixel stroke, plus numeric commit/cancel, bounds, step rounding, synchronization, reset, and disabled states.
+
+The updated sample color errors / silhouette mismatches are: bloom 0.00383 / 0.00590, camera 0.00218 / 0.00087, pop 0.00433 / 0, and pixel heart 0 / 0. These are fixture measurements, not a guarantee for arbitrary artwork. The original validation results below remain a historical baseline.
+
+## Original release
+
 Validated on September 8, 2026, using headless Google Chrome on macOS and Cloudflare Wrangler 4.130.0 local static-asset serving.
 
 ## Verified

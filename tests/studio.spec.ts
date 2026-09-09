@@ -7,6 +7,46 @@ async function ready(page: Page) {
   await expect(page.getByRole('alert')).toHaveCount(0);
 }
 
+test('numeric controls commit, clamp, cancel, and stay synchronized', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Try Camera sample' }).click();
+  await ready(page);
+  const number = page.getByRole('spinbutton', { name: 'Set color limit', exact: true });
+  const slider = page.getByRole('slider', { name: 'Color limit', exact: true });
+  await number.fill('12');
+  await expect(slider).toHaveValue('8');
+  await number.press('Enter');
+  await expect(slider).toHaveValue('12');
+  await ready(page);
+  await number.fill('99');
+  await number.press('Tab');
+  await expect(number).toHaveValue('32');
+  await expect(slider).toHaveValue('32');
+  await number.fill('');
+  await number.press('Tab');
+  await expect(number).toHaveValue('32');
+  await number.fill('4');
+  await number.press('Escape');
+  await expect(number).toHaveValue('32');
+  await slider.fill('6');
+  await expect(number).toHaveValue('6');
+  await number.fill('-5');
+  await number.press('Enter');
+  await expect(slider).toHaveValue('2');
+  await page.getByText('Fine-tune details', { exact: true }).click();
+  const precision = page.getByRole('spinbutton', { name: 'Set path simplification' });
+  await precision.fill('0.26');
+  await precision.press('Enter');
+  await expect(precision).toHaveValue('0.3');
+  await page.getByRole('button', { name: /Pixel art Every edge/ }).click();
+  await expect(precision).toBeDisabled();
+  await expect(page.getByRole('spinbutton', { name: 'Set corner smoothing' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Reset settings' }).click();
+  await expect(number).toHaveValue('8');
+  await expect(precision).toHaveValue('0.2');
+  await ready(page);
+});
+
 test('Wasm traces every sample into standalone, editable SVG paths', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -36,13 +76,13 @@ test('color, smoothing, cleanup, presets, and export operate on actual output', 
   await page.getByRole('button', { name: 'Try Sun bloom sample' }).click();
   await ready(page);
   const initial = await svgFromPage(page);
-  await page.getByLabel('Color limit').fill('2');
+  await page.getByRole('slider', { name: 'Color limit', exact: true }).fill('2');
   await ready(page);
   const reduced = await svgFromPage(page);
   expect(reduced).not.toEqual(initial);
   const colors = await page.evaluate((svg) => [...new Set(Array.from(new DOMParser().parseFromString(svg, 'image/svg+xml').querySelectorAll('[fill]')).map((element) => element.getAttribute('fill')))], reduced);
   expect(colors.length).toBeLessThanOrEqual(2);
-  await page.getByLabel('Corner smoothing').fill('100');
+  await page.getByRole('slider', { name: 'Corner smoothing', exact: true }).fill('100');
   await ready(page);
   expect(await svgFromPage(page)).not.toEqual(reduced);
   await page.getByRole('button', { name: /Pixel art Every edge/ }).click();
@@ -59,10 +99,10 @@ test('color, smoothing, cleanup, presets, and export operate on actual output', 
   expect(download.suggestedFilename()).toBe('bloom-vector.svg');
   expect(await readFile((await download.path())!, 'utf8')).toEqual(initial);
   await page.getByRole('button', { name: 'Try Speckle test sample' }).click();
-  await page.getByLabel('Noise cleanup').fill('0');
+  await page.getByRole('slider', { name: 'Noise cleanup', exact: true }).fill('0');
   await ready(page);
   const noisy = await svgFromPage(page);
-  await page.getByLabel('Noise cleanup').fill('20');
+  await page.getByRole('slider', { name: 'Noise cleanup', exact: true }).fill('20');
   await ready(page);
   const clean = await svgFromPage(page);
   expect((clean.match(/<path/g) || []).length).toBeLessThan((noisy.match(/<path/g) || []).length);
@@ -106,9 +146,9 @@ test('drop, upload errors, mobile layout, and rapid changes recover', async ({ p
   });
   await ready(page);
   await expect(page.locator('.file-label')).toContainText('dropped.png');
-  for (const value of ['4', '20', '2', '16']) await page.getByLabel('Color limit').fill(value);
+  for (const value of ['4', '20', '2', '16']) await page.getByRole('slider', { name: 'Color limit', exact: true }).fill(value);
   await ready(page);
-  await expect(page.getByLabel('Color limit')).toHaveValue('16');
+  await expect(page.getByRole('slider', { name: 'Color limit', exact: true })).toHaveValue('16');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: 'test-results/mobile.png', fullPage: true });
   const settingsBounds = await page.getByRole('complementary', { name: 'Tracing settings' }).boundingBox();

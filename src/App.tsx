@@ -18,8 +18,20 @@ function Slider({ label, value, min, max, step = 1, suffix = '', hint, disabled,
   label: string; value: number; min: number; max: number; step?: number; suffix?: string; hint: string; disabled?: boolean; onChange: (value: number) => void;
 }) {
   const id = label.toLowerCase().replaceAll(' ', '-');
+  const [draft, setDraft] = useState(String(value));
+  useEffect(() => { setDraft(String(value)); }, [value]);
+  const commit = () => {
+    const parsed = Number(draft);
+    if (!draft.trim() || !Number.isFinite(parsed)) { setDraft(String(value)); return; }
+    const bounded = Math.min(max, Math.max(min, parsed));
+    const snapped = Number((min + Math.round((bounded - min) / step) * step).toFixed(6));
+    const next = Math.min(max, Math.max(min, snapped));
+    setDraft(String(next));
+    if (next !== value) onChange(next);
+  };
   return <div className={`slider-field ${disabled ? 'disabled' : ''}`}>
-    <label htmlFor={id}><span>{label}</span><output htmlFor={id}>{value}{suffix}</output></label>
+    <div className="slider-heading"><label htmlFor={id}>{label}</label><span className="number-field"><input type="number" aria-label={`Set ${label.toLowerCase()}`} aria-describedby={`${id}-hint ${id}-entry-help`} value={draft} min={min} max={max} step={step} disabled={disabled} onChange={(event) => setDraft(event.target.value)} onBlur={commit} onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); commit(); } if (event.key === 'Escape') { event.preventDefault(); setDraft(String(value)); } }} />{suffix && <span>{suffix.trim()}</span>}</span></div>
+    <span className="sr-only" id={`${id}-entry-help`}>Press Enter or leave the field to apply. Escape cancels. Range {min} to {max}; step {step}.</span>
     <input id={id} type="range" value={value} min={min} max={max} step={step} disabled={disabled} onChange={(event) => onChange(Number(event.target.value))} aria-describedby={`${id}-hint`} style={{ '--fill': `${100 * (value - min) / (max - min)}%` } as React.CSSProperties} />
     <p id={`${id}-hint`}>{hint}</p>
   </div>;

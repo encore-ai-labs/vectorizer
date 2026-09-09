@@ -90,7 +90,9 @@ kbd { font-family: inherit; font-size: 13px; font-weight: 700; padding: 0; borde
 .section-break { margin: 16px 0; border-top: 1px solid var(--border); }
 .slider-field { margin-bottom: 16px; }
 .slider-field label { display: flex; justify-content: space-between; align-items: center; font-size: 14px; gap: 8px; }
-.slider-field output { text-align: right; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.slider-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.number-field { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
+.number-field input { width: 64px; min-height: 28px; padding: 3px 4px; border: 1px solid #888; border-radius: 2px; background: #fff; color: #222; font-size: 13px; font-variant-numeric: tabular-nums; }
 input[type=range] { display: block; width: 100%; height: 20px; appearance: none; background: transparent; cursor: pointer; margin: 9px 0 5px; }
 input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 0; background: linear-gradient(to right, var(--accent) var(--fill), #dedbe3 var(--fill)); }
 input[type=range]::-moz-range-track { height: 4px; border-radius: 0; background: linear-gradient(to right, var(--accent) var(--fill), #dedbe3 var(--fill)); }

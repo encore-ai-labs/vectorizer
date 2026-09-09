@@ -12,7 +12,7 @@ export interface Settings {
 }
 
 export const presets: Record<string, { name: string; description: string; settings: Settings }> = {
-  clean: { name: 'Clean icon', description: 'Crisp, simple shapes', settings: { colors: 8, smoothing: 55, speckle: 4, simplify: 0.5, denoise: 0, mode: 'spline', removeBackground: false, backgroundTolerance: 18 } },
+  clean: { name: 'Clean icon', description: 'Crisp, simple shapes', settings: { colors: 8, smoothing: 25, speckle: 1, simplify: 0.2, denoise: 0, mode: 'spline', removeBackground: false, backgroundTolerance: 18 } },
   artwork: { name: 'Pop art', description: 'Bold color, soft curves', settings: { colors: 16, smoothing: 75, speckle: 5, simplify: 0.8, denoise: 1, mode: 'spline', removeBackground: false, backgroundTolerance: 18 } },
   detail: { name: 'Fine detail', description: 'Keep the little things', settings: { colors: 32, smoothing: 25, speckle: 0, simplify: 0, denoise: 0, mode: 'spline', removeBackground: false, backgroundTolerance: 18 } },
   pixel: { name: 'Pixel art', description: 'Every edge intact', settings: { colors: 16, smoothing: 0, speckle: 0, simplify: 0, denoise: 0, mode: 'pixel', removeBackground: false, backgroundTolerance: 18 } },

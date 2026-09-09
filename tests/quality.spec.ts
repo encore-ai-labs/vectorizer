@@ -45,6 +45,34 @@ test('sample vectors preserve raster appearance and transparent boundaries', asy
   console.log('Raster fidelity:', JSON.stringify(reports));
 });
 
+test('default tracing preserves square corners and isolated thin strokes', async ({ page }) => {
+  await page.goto('/');
+  const png = await page.evaluate(async () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128; canvas.height = 128;
+    const context = canvas.getContext('2d')!;
+    context.fillStyle = '#222222';
+    context.fillRect(16, 16, 64, 64);
+    context.fillRect(100, 16, 1, 64);
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  await page.getByLabel('Upload PNG').setInputFiles({ name: 'corners-and-stroke.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
+  await ready(page);
+  const coverage = await page.evaluate(async () => {
+    const image = document.querySelector<HTMLImageElement>('img[alt="Vectorized SVG preview"]')!;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = 128; canvas.height = 128;
+    const context = canvas.getContext('2d')!;
+    context.drawImage(image, 0, 0, 128, 128);
+    const pixels = context.getImageData(0, 0, 128, 128).data;
+    const alpha = (horizontal: number, vertical: number) => pixels[(vertical * 128 + horizontal) * 4 + 3];
+    return { corners: [[18, 18], [77, 18], [18, 77], [77, 77]].map(([horizontal, vertical]) => alpha(horizontal, vertical)), stroke: alpha(100, 48) };
+  });
+  for (const alpha of coverage.corners) expect(alpha).toBeGreaterThan(200);
+  expect(coverage.stroke).toBeGreaterThan(100);
+});
+
 test('blank transparency, PNG validation, and original dimensions are handled', async ({ page }) => {
   await page.goto('/');
   const png = await page.evaluate(async () => {

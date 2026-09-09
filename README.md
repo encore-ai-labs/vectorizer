@@ -18,6 +18,7 @@ Open the URL printed by Vite. Paste a screenshot with **⌘V / Ctrl+V**, drop a 
 
 - Start with Clean icon, Pop art, Fine detail, or Pixel art.
 - Limit colors, smooth corners, remove small speckles, and simplify paths with live previews.
+- Type exact values beside sliders; press Enter or leave the field to apply, or Escape to cancel. Values are clamped to the supported range and rounded to the control's step. Clean icon starts with conservative smoothing and cleanup to retain corners and thin strokes.
 - Advanced controls include edge-aware denoising, curve/polygon/pixel modes, and edge-connected background removal. Background removal samples the four corner colors; it may remove artwork that touches the image border. It does not remove enclosed matching regions.
 - Compare original and vector side-by-side, change the preview background, and zoom up to 400%. Preview background colors do not modify the exported SVG.
 - Download standalone SVGs containing editable paths (not embedded PNGs), or copy SVG markup. To import reliably into Figma, drag the downloaded SVG into the canvas. Clipboard markup behavior depends on the destination application.

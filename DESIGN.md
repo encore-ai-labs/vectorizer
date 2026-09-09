@@ -63,7 +63,7 @@ Square containers and near-square, 2px-radius buttons. No rounded card shells. T
 - Primary actions: gray bordered buttons with bold labels, not saturated blocks.
 - Secondary actions: blue underlined text with clear focus outlines. Keep button semantics for actions.
 - Presets: compact named buttons; selected state uses both weight and fill.
-- Ranges: visible numeric values and explanatory labels; retain keyboard interaction.
+- Ranges: editable numeric fields and explanatory labels; retain keyboard interaction. Enter or blur commits, Escape cancels, and invalid empty input restores the current value. Sliders and numeric fields remain synchronized and share disabled states.
 - Empty state: import, screenshot paste shortcuts, file limits, and examples. Reveal tracing controls only after import.
 - Feedback: keep error recovery, busy state, disabled export, and screen-reader status announcements.
 
