@@ -34,3 +34,14 @@ The fixed regression gates are mean RGB error below 0.025 and silhouette mismatc
 - Figma’s UI has not been automated; exports are standard path-only SVGs intended for file import. Clipboard markup acceptance is application-dependent.
 - No GPU speedup is claimed or required. GPU preprocessing remains a benchmark-driven extension, not a dependency.
 - These fixtures do not establish fidelity for all photos, gradients, text, or extremely detailed art. See the limits in the README.
+
+## Hands-on computer-use pass
+
+Also exercised the production preview in native Safari through computer-use controls, not Playwright:
+
+- Loaded pop art, switched presets, and reduced the palette to four colors; the output updated to four colors and six paths.
+- On the noisy-ring sample, Fine detail produced 185 paths / 15.8 KB. Raising cleanup to 20 reduced it to 3 paths / 1.2 KB while retaining the ring and its enclosed center.
+- Pasted a real raster screenshot using native Command-V. Aggressive cleanup erased small details, as the control warns; Fine detail recovered the lettering and fine marks. No private clipboard image was saved to the repository.
+- Inspected the source and vector previews visually and returned the app to the public flower sample with default settings.
+
+The initial GitHub Actions run also passed all checks on Linux Chromium: https://github.com/encore-ai-labs/vectorizer/actions/runs/34296194149
